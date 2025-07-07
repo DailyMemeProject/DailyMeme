@@ -1,4 +1,4 @@
 package com.dailymeme.dailymeme.controller
 
-class MemeController {
+class KotlinMemeController {
 }
