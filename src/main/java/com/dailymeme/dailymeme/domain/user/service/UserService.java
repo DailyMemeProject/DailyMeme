@@ -1,5 +1,7 @@
 package com.dailymeme.dailymeme.domain.user.service;
 
+import com.dailymeme.dailymeme.domain.user.dto.login.UserLoginRequestDto;
+import com.dailymeme.dailymeme.domain.user.dto.login.UserLoginResponseDto;
 import com.dailymeme.dailymeme.domain.user.dto.signup.UserSignupRequestDto;
 import com.dailymeme.dailymeme.domain.user.dto.signup.UserSignupResponseDto;
 import com.dailymeme.dailymeme.domain.user.entity.User;
@@ -7,7 +9,8 @@ import com.dailymeme.dailymeme.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,6 +21,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     //Signup
     @Transactional
@@ -38,13 +42,39 @@ public class UserService {
 
     }
 
+    @Transactional
+    public UserLoginResponseDto login(
+            UserLoginRequestDto userLoginRequestDto) {
+
+        String email = userLoginRequestDto.getEmail();
+        String password = userLoginRequestDto.getPassword();
+
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new BadCredentialsException("Wrong Information"));
+
+        if(!passwordEncoder.matches(password, user.getPassword())) {
+            throw new BadCredentialsException("Wrong Information -> PassWord : ");
+        }
+
+        //Access Token
+
+        //Refresh Token
+
+        return new UserLoginResponseDto(user.getId(), user.getUserName(), user.getEmail());
+    }
+
+
+    //User create Builder
     private User buildUser(UserSignupRequestDto userSignupRequestDto) {
         return User.builder()
                 .userName(userSignupRequestDto.getUsername())
                 .email(userSignupRequestDto.getEmail())
-                .password(userSignupRequestDto.getPassword())
+                .password(getEncodingPassword(userSignupRequestDto.getPassword()))
                 .mail_send_agree(userSignupRequestDto.getMail_send_agree())
                 .build();
+    }
+
+    private String getEncodingPassword(String password) {
+        return passwordEncoder.encode(password);
     }
 
 }
