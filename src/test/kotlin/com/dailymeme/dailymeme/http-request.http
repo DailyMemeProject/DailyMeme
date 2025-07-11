@@ -1,0 +1,15 @@
+### 테스트: GET 요청
+#GET http://localhost:8080/api/user/signup
+#Accept: application/json
+
+### 테스트: POST 요청
+POST http://localhost:8080/api/users/signup
+Content-Type: application/json
+
+{
+  "username" : "김영웅",
+  "email" : "ghkfud6545@gmail.com",
+  "password" : "1234",
+  "mail_send_agree" : true
+
+}
