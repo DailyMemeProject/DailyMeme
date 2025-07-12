@@ -1,5 +1,5 @@
 
-package com.dailymeme.dailymeme.scheduler;
+package com.dailymeme.dailymeme.global.scheduler;
 
 import org.springframework.stereotype.Component;
 
