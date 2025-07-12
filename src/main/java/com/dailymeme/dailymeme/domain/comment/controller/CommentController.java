@@ -19,51 +19,51 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    /*
-    댓글 작성
-     */
-    @PostMapping
-    public ResponseEntity<CommentResponseDto> createComment(
-            @PathVariable Long postId,
-            @Valid @RequestBody CommentRequestDto commentRequestDto
-    ) {
-        CommentResponseDto commentResponseDto = commentService.createComment(postId, commentRequestDto);
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
-    }
-
-    /*
-    댓글 수정
-     */
-    @PutMapping
-    public ResponseEntity<CommentResponseDto> updateComment(
-            @PathVariable Long postId,
-            @PathVariable Long commentId,
-            @Valid @RequestBody CommentRequestDto commentRequestDto
-    ) {
-        CommentResponseDto commentResponseDto = commentService.updateComment(postId, commentId, commentRequestDto);
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
-    }
-
-    /*
-    댓글 조회
-     */
-    @GetMapping
-    public ResponseEntity<List<CommentResponseDto>> findAllComment(
-            @PathVariable Long postId
-    ) {
-        List<CommentResponseDto> commentResponseDto = commentService.findAllComment(postId);
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
-    }
-
-    /*
-    댓글 삭제
-     */
-    @DeleteMapping
-    public ResponseEntity<CommentResponseDto> deleteComment(
-            @PathVariable Long postId,
-            @PathVariable Long commentId
-    ) {
-        CommentResponseDto commentResponseDto = commentService.deleteComment(postId, commentId);
-        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
-    }
+//    /*
+//    댓글 작성
+//     */
+//    @PostMapping
+//    public ResponseEntity<CommentResponseDto> createComment(
+//            @PathVariable Long postId,
+//            @Valid @RequestBody CommentRequestDto commentRequestDto
+//    ) {
+//        CommentResponseDto commentResponseDto = commentService.createComment(postId, commentRequestDto);
+//        return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
+//    }
+//
+//    /*
+//    댓글 수정
+//     */
+//    @PutMapping
+//    public ResponseEntity<CommentResponseDto> updateComment(
+//            @PathVariable Long postId,
+//            @PathVariable Long commentId,
+//            @Valid @RequestBody CommentRequestDto commentRequestDto
+//    ) {
+//        CommentResponseDto commentResponseDto = commentService.updateComment(postId, commentId, commentRequestDto);
+//        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+//    }
+//
+//    /*
+//    댓글 조회
+//     */
+//    @GetMapping
+//    public ResponseEntity<List<CommentResponseDto>> findAllComment(
+//            @PathVariable Long postId
+//    ) {
+//        List<CommentResponseDto> commentResponseDto = commentService.findAllComment(postId);
+//        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+//    }
+//
+//    /*
+//    댓글 삭제
+//     */
+//    @DeleteMapping
+//    public ResponseEntity<CommentResponseDto> deleteComment(
+//            @PathVariable Long postId,
+//            @PathVariable Long commentId
+//    ) {
+//        CommentResponseDto commentResponseDto = commentService.deleteComment(postId, commentId);
+//        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+//    }
 }

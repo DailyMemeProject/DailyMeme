@@ -23,9 +23,9 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "post_id", nullable = false)
+//    private Post post;
 
     private String comment ;
 
@@ -33,13 +33,13 @@ public class Comment extends BaseEntity {
 
     public Comment() {}
 
-    public Comment(User user, Post post, String comment) {
-        this.Post = post;
-        this.user = user;
-        this.comment = comment;
-    }
-
-    public void update(String newContent) {
-        this.content = newContent;
-    }
+//    public Comment(User user, Post post, String comment) {
+//        this.Post = post;
+//        this.user = user;
+//        this.comment = comment;
+//    }
+//
+//    public void update(String newContent) {
+//        this.content = newContent;
+//    }
 }
