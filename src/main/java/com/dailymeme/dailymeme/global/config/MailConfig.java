@@ -1,8 +1,8 @@
 
-package com.dailymeme.dailymeme.config;
+package com.dailymeme.dailymeme.global.config;
 
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class CorsConfig {
+public class MailConfig {
 }
