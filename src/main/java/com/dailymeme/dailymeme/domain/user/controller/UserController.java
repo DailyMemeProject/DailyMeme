@@ -27,14 +27,14 @@ public class UserController {
     }
 
     //로그인
-//    @PostMapping("/login")
-//    public ResponseEntity<UserLoginResponseDto> login(
-//            @RequestBody UserLoginRequestDto userLoginRequestDto) {
-//
-//        UserLoginResponseDto userLoginResponseDto = userService.login(userLoginRequestDto);
-//
-//        return new ResponseEntity<>(userLoginResponseDto, HttpStatus.OK);
-//    }
+    @PostMapping("/login")
+    public ResponseEntity<UserLoginResponseDto> login(
+            @RequestBody UserLoginRequestDto userLoginRequestDto) {
+
+        UserLoginResponseDto userLoginResponseDto = userService.login(userLoginRequestDto);
+
+        return new ResponseEntity<>(userLoginResponseDto, HttpStatus.OK);
+    }
 
 
 }
