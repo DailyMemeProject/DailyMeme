@@ -33,7 +33,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
-
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
@@ -43,6 +42,15 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+    //jwt
+    implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+
 
 }
 
