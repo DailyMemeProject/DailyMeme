@@ -51,6 +51,10 @@ public class User extends BaseEntity {
         this.password = password;
         this.mail_send_agree = mail_send_agree;
     }
+    public Boolean isActive() {
+        return userStatus.equals(UserStatus.ACTIVE);
+    }
+
 
 
 

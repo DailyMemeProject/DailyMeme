@@ -6,6 +6,9 @@ import com.dailymeme.dailymeme.domain.user.dto.signup.UserSignupRequestDto;
 import com.dailymeme.dailymeme.domain.user.dto.signup.UserSignupResponseDto;
 import com.dailymeme.dailymeme.domain.user.entity.User;
 import com.dailymeme.dailymeme.domain.user.repository.UserRepository;
+import com.dailymeme.dailymeme.global.entity.RefreshToken;
+import com.dailymeme.dailymeme.global.jwtutil.JwtUtil;
+import com.dailymeme.dailymeme.global.token.repository.RefreshTokenRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     //Signup
     @Transactional
@@ -49,17 +54,26 @@ public class UserService {
         String email = userLoginRequestDto.getEmail();
         String password = userLoginRequestDto.getPassword();
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new BadCredentialsException("Wrong Information"));
+        User user = userRepository.findByEmailOrElseThrow(email);
 
-        if(!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadCredentialsException("Wrong Information -> PassWord : ");
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new BadCredentialsException("비밀번호 오류 나중에 수정하기(영웅)");
         }
 
-        //Access Token
+        String accessToken = jwtUtil.generateAccessToken(user.getId());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getId());
 
-        //Refresh Token
+        log.info("Access 토큰 생성 : {}", accessToken);
+        log.info("Refresh 토큰 생성 : {}", refreshToken);
 
-        return new UserLoginResponseDto(user.getId(), user.getUserName(), user.getEmail());
+        refreshTokenRepository.findByUser(user)
+                .ifPresentOrElse(
+                        existing -> existing.updateRefreshToken(refreshToken),
+                        () -> refreshTokenRepository.save(new RefreshToken(user, refreshToken))
+                );
+
+
+        return new UserLoginResponseDto(user.getId(), user.getUserName(), user.getEmail(),accessToken, refreshToken);
     }
 
 
