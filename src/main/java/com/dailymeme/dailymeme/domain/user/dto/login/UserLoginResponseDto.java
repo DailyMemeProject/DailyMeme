@@ -10,8 +10,6 @@ public class UserLoginResponseDto {
     private String refreshToken;
     private String accessToken;
 
-    //private String refreshToken;
-
     public UserLoginResponseDto(Long id, String username, String email,String accessToken, String refreshToken) {
         this.id = id;
         this.userName = username;
