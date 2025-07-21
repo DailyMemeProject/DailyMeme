@@ -7,8 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserSignupResponseDto {
 
-    private Long id;
-    private String username;
-    private String email;
-    private Boolean mail_send_agree;
+    String message;
 }

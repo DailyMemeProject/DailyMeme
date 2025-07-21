@@ -34,6 +34,7 @@ public class UserService {
             UserSignupRequestDto userSignupRequestDto) {
 
         User user = buildUser(userSignupRequestDto);
+        String message = "회원가입이 완료되었습니다!";
 
         Optional<User> duplicateCheck = userRepository.findByEmail(userSignupRequestDto.getEmail());
 
@@ -43,7 +44,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return new UserSignupResponseDto(user.getId(), user.getUserName(), user.getEmail(), user.getMail_send_agree());
+        return new UserSignupResponseDto(message);
 
     }
 
