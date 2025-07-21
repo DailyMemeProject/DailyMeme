@@ -32,7 +32,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             List.of("/api/users/login", "/api/users/signup-patient","/api/users/signup-doctor",
                     "/login/oauth2/code/google","/chat", "/chat/**",
                     "/login", "/signup",
-                    "/api/payments/kakaopay", "/api/payments/kakaopay/success", "/actuator/**");
+                    "/api/payments/kakaopay", "/api/payments/kakaopay/success", "/actuator/**",
+                    "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

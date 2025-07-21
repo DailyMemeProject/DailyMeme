@@ -25,7 +25,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class WebConfig {
 
-    private static final String[] WHITE_LIST = {"/api/users/signup", "/api/users/login"};
+    private static final String[] WHITE_LIST = {"/api/users/signup", "/api/users/login", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html"};
 
     private final JwtAuthFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
