@@ -1,5 +1,9 @@
 package com.dailymeme.dailymeme.domain.user.service;
 
+import com.dailymeme.dailymeme.domain.user.dto.info.UserInfoListResponseDto;
+import com.dailymeme.dailymeme.domain.user.dto.info.UserInfoResponseDto;
+import com.dailymeme.dailymeme.domain.user.dto.info.UserInfoUpdateRequestDto;
+import com.dailymeme.dailymeme.domain.user.dto.info.UserInfoUpdateResponseDto;
 import com.dailymeme.dailymeme.domain.user.dto.login.UserLoginRequestDto;
 import com.dailymeme.dailymeme.domain.user.dto.login.UserLoginResponseDto;
 import com.dailymeme.dailymeme.domain.user.dto.signup.UserSignupRequestDto;
@@ -7,15 +11,19 @@ import com.dailymeme.dailymeme.domain.user.dto.signup.UserSignupResponseDto;
 import com.dailymeme.dailymeme.domain.user.entity.User;
 import com.dailymeme.dailymeme.domain.user.repository.UserRepository;
 import com.dailymeme.dailymeme.global.entity.RefreshToken;
+import com.dailymeme.dailymeme.global.exception.ExceptionType;
 import com.dailymeme.dailymeme.global.jwtutil.JwtUtil;
 import com.dailymeme.dailymeme.global.token.repository.RefreshTokenRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,6 +56,7 @@ public class UserService {
 
     }
 
+    //Login
     @Transactional
     public UserLoginResponseDto login(
             UserLoginRequestDto userLoginRequestDto) {
@@ -77,6 +86,46 @@ public class UserService {
         return new UserLoginResponseDto(user.getId(), user.getUserName(), user.getEmail(),accessToken, refreshToken);
     }
 
+    //사용자 전체 조회
+    @Transactional
+    public List<UserInfoListResponseDto> getAllUsers() {
+        List<UserInfoListResponseDto> userList = new ArrayList<>();
+
+        List<UserInfoListResponseDto> findUserList = userRepository.findUserByUserAuth();
+
+        for(UserInfoListResponseDto user : findUserList) {
+            userList.add(new UserInfoListResponseDto(
+                    user.getUserName(),
+                    user.getEmail(),
+                    user.getMailSendAgree()));
+        }
+        return findUserList;
+    }
+
+    //사용자 단건 조회
+    @Transactional
+    public UserInfoResponseDto getUserById(Long userId) {
+        User user = userRepository.findByIdOrElseThrow(userId);
+
+        return new UserInfoResponseDto(user.getUserName(), user.getEmail());
+    }
+
+    //사용자 정보 변경
+    @Transactional
+    public UserInfoUpdateResponseDto updateUserInfo(UserInfoUpdateRequestDto requestDto, User user) {
+
+        User managedUser = userRepository.findByIdOrElseThrow(user.getId());
+
+        log.info("Service - Before update: mailSendAgree = {}", managedUser.getMailSendAgree());
+        log.info("Service - DTO value: mailSendAgree = {}", requestDto.getMailSendAgree());
+
+        managedUser.updateInfo(requestDto.getMailSendAgree());
+
+        log.info("Service - After update: mailSendAgree = {}", managedUser.getMailSendAgree());
+
+        return new UserInfoUpdateResponseDto(managedUser);
+
+    }
 
     //User create Builder
     private User buildUser(UserSignupRequestDto userSignupRequestDto) {
@@ -84,7 +133,7 @@ public class UserService {
                 .userName(userSignupRequestDto.getUsername())
                 .email(userSignupRequestDto.getEmail())
                 .password(getEncodingPassword(userSignupRequestDto.getPassword()))
-                .mail_send_agree(userSignupRequestDto.getMail_send_agree())
+                .mailSendAgree(userSignupRequestDto.getMailSendAgree())
                 .build();
     }
 
