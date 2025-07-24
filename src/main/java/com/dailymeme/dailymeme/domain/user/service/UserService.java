@@ -1,5 +1,6 @@
 package com.dailymeme.dailymeme.domain.user.service;
 
+import com.dailymeme.dailymeme.domain.user.dto.delete.UserDeleteResponseDto;
 import com.dailymeme.dailymeme.domain.user.dto.info.UserInfoListResponseDto;
 import com.dailymeme.dailymeme.domain.user.dto.info.UserInfoResponseDto;
 import com.dailymeme.dailymeme.domain.user.dto.info.UserInfoUpdateRequestDto;
@@ -9,9 +10,11 @@ import com.dailymeme.dailymeme.domain.user.dto.login.UserLoginResponseDto;
 import com.dailymeme.dailymeme.domain.user.dto.signup.UserSignupRequestDto;
 import com.dailymeme.dailymeme.domain.user.dto.signup.UserSignupResponseDto;
 import com.dailymeme.dailymeme.domain.user.entity.User;
+import com.dailymeme.dailymeme.domain.user.enums.UserStatus;
 import com.dailymeme.dailymeme.domain.user.repository.UserRepository;
 import com.dailymeme.dailymeme.global.entity.RefreshToken;
 import com.dailymeme.dailymeme.global.exception.ExceptionType;
+import com.dailymeme.dailymeme.global.exception.WrongPassWordException;
 import com.dailymeme.dailymeme.global.jwtutil.JwtUtil;
 import com.dailymeme.dailymeme.global.token.repository.RefreshTokenRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -125,6 +128,23 @@ public class UserService {
 
         return new UserInfoUpdateResponseDto(managedUser);
 
+    }
+
+    //사용자 탈퇴
+    @Transactional
+    public UserDeleteResponseDto deleteUser(User user, String password) {
+
+        User deleteUser = userRepository.findByIdOrElseThrow(user.getId());
+
+        if(!passwordEncoder.matches(password, deleteUser.getPassword())) {
+            throw new WrongPassWordException(ExceptionType.WRONG_PASSWORD);
+        }
+        deleteUser.deleteUser(UserStatus.DELETED);
+        userRepository.save(deleteUser);
+
+        String message = "정상적으로 삭제되었습니다.";
+
+        return new UserDeleteResponseDto(message);
     }
 
     //User create Builder
