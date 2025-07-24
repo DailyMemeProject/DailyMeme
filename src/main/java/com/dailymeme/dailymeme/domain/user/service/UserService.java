@@ -13,10 +13,13 @@ import com.dailymeme.dailymeme.domain.user.entity.User;
 import com.dailymeme.dailymeme.domain.user.enums.UserStatus;
 import com.dailymeme.dailymeme.domain.user.repository.UserRepository;
 import com.dailymeme.dailymeme.global.entity.RefreshToken;
+import com.dailymeme.dailymeme.global.exception.CustomException;
+import com.dailymeme.dailymeme.global.exception.DeletedUserException;
 import com.dailymeme.dailymeme.global.exception.ExceptionType;
 import com.dailymeme.dailymeme.global.exception.WrongPassWordException;
 import com.dailymeme.dailymeme.global.jwtutil.JwtUtil;
 import com.dailymeme.dailymeme.global.token.repository.RefreshTokenRepository;
+import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,8 +72,12 @@ public class UserService {
 
         User user = userRepository.findByEmailOrElseThrow(email);
 
+        if(user.getUserStatus() == UserStatus.DELETED) {
+            throw new DeletedUserException(ExceptionType.DELETED_USER);
+        }
+
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadCredentialsException("비밀번호 오류 나중에 수정하기(영웅)");
+            throw new WrongPassWordException(ExceptionType.WRONG_PASSWORD);
         }
 
         String accessToken = jwtUtil.generateAccessToken(user.getId());
