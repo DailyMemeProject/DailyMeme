@@ -60,5 +60,9 @@ public class User extends BaseEntity {
         this.mailSendAgree = mailSendAgree;
     }
 
+    public void deleteUser(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+
 
 }

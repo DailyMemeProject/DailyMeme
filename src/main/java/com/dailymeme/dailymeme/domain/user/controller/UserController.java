@@ -1,6 +1,8 @@
 package com.dailymeme.dailymeme.domain.user.controller;
 
 
+import com.dailymeme.dailymeme.domain.user.dto.delete.UserDeleteRequestDto;
+import com.dailymeme.dailymeme.domain.user.dto.delete.UserDeleteResponseDto;
 import com.dailymeme.dailymeme.domain.user.dto.info.UserInfoListResponseDto;
 import com.dailymeme.dailymeme.domain.user.dto.info.UserInfoResponseDto;
 import com.dailymeme.dailymeme.domain.user.dto.info.UserInfoUpdateRequestDto;
@@ -90,6 +92,19 @@ public class UserController {
     }
 
     //회원 탈퇴
+    @PatchMapping("/delete")
+    public ResponseEntity<UserDeleteResponseDto> deleteUser(@RequestBody UserDeleteRequestDto requestDto,
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        User user = userDetails.getUser();
+
+        String password = requestDto.getPassword();
+
+        UserDeleteResponseDto responseDto = userService.deleteUser(user,password);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+
+    }
 
 
 }
