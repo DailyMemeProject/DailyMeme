@@ -17,6 +17,16 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(CustomException.class)
+    protected ResponseEntity<ExceptionResponseBody> handleCustomException(CustomException e) {
+        ExceptionResponseBody exceptionResponseBody = new ExceptionResponseBody(
+                e.getExceptionType().getHttpStatus(),
+                e.getExceptionType().getHttpStatus().value(),
+                Map.of("error", e.getExceptionType().getMessage())
+        );
+        return new ResponseEntity<>(exceptionResponseBody, e.getExceptionType().getHttpStatus());
+    }
+
     @ExceptionHandler(BadRequestException.class)
     protected ResponseEntity<ExceptionResponseBody> handleBadRequestException(BadRequestException e) {
         ExceptionResponseBody exceptionResponseBody = new ExceptionResponseBody(

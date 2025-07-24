@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
     default User findByEmailOrElseThrow(String email) {
-        return findByEmail(email).orElseThrow(()-> new IllegalArgumentException("Wrong Information -> PassWord : "));
+        return findByEmail(email).orElseThrow(()-> new NotFoundException(ExceptionType.USER_NOT_FOUND));
     }
 
     default User findByIdOrElseThrow(Long id) {
