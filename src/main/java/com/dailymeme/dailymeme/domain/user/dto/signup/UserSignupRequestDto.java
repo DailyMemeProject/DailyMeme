@@ -8,6 +8,6 @@ public class UserSignupRequestDto {
     private String username;
     private String email;
     private String password;
-    private Boolean mail_send_agree;
+    private Boolean mailSendAgree;
 
 }

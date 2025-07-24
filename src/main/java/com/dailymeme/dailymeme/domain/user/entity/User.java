@@ -38,24 +38,27 @@ public class User extends BaseEntity {
     private LocalDateTime deletedAt;
 
     @Column(nullable = false)
-    private Boolean mail_send_agree;
+    private Boolean mailSendAgree;
 
     public User() {
 
     }
 
     @Builder
-    public User(String userName, String email, String password, Boolean mail_send_agree) {
+    public User(String userName, String email, String password, Boolean mailSendAgree) {
         this.userName = userName;
         this.email = email;
         this.password = password;
-        this.mail_send_agree = mail_send_agree;
+        this.mailSendAgree = mailSendAgree;
     }
     public Boolean isActive() {
         return userStatus.equals(UserStatus.ACTIVE);
     }
 
 
+    public void updateInfo(Boolean mailSendAgree) {
+        this.mailSendAgree = mailSendAgree;
+    }
 
 
 }
